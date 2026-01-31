@@ -9,7 +9,7 @@ import * as path from 'path';
 const program = new Command();
 
 program
-  .name('tailwind-class-sorter')
+  .name('tailwind-sort')
   .description('Sort Tailwind CSS classes in files')
   .version('2.0.0');
 

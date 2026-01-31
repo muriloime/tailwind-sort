@@ -1,11 +1,11 @@
 {
-  "name": "tailwind-class-sorter",
+  "name": "tailwind-sort",
   "version": "2.0.0",
   "description": "A standalone Tailwind CSS class sorter utility for sorting, deduplicating, and organizing Tailwind classes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "tailwind-class-sorter": "./bin/tailwind-class-sorter"
+    "tailwind-sort": "./bin/tailwind-sort"
   },
   "scripts": {
     "build": "tsc",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/muriloime/tailwind-class-sorter"
+    "url": "https://github.com/muriloime/tailwind-sort"
   },
   "files": [
     "dist",
