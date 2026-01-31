@@ -4,6 +4,9 @@
   "description": "A standalone Tailwind CSS class sorter utility for sorting, deduplicating, and organizing Tailwind classes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "tailwind-class-sorter": "./bin/tailwind-class-sorter"
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",
@@ -25,11 +28,13 @@
   },
   "files": [
     "dist",
+    "bin",
     "README.md",
     "LICENSE"
   ],
   "dependencies": {
-    "@herb-tools/tailwind-class-sorter": "^0.8.9"
+    "@herb-tools/tailwind-class-sorter": "^0.8.9",
+    "commander": "^12.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
