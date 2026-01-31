@@ -45,6 +45,31 @@ Builds regex matchers from class order configuration.
 
 Extracts class strings from text using a wrapper regex pattern.
 
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build the package
+npm run build
+
+# Run tests
+npm test
+```
+
+## Publishing
+
+This package can be published to npm. Before publishing:
+
+1. Ensure all tests pass: `npm test`
+2. Build the package: `npm run build`
+3. Update version in package.json if needed
+4. Login to npm: `npm login`
+5. Publish: `npm publish`
+
+Note: The `prepublishOnly` script will automatically run build and tests before publishing.
+
 ## License
 
 MIT
