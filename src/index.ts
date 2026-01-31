@@ -158,5 +158,5 @@ export function getTextMatch(
 	}
 }
 
-// Re-export types
-export type { Options, LangConfig, Matcher } from './types';
+// Re-export types (using compatible syntax for older TypeScript versions)
+export { Options, LangConfig, Matcher } from './types';
