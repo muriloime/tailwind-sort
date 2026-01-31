@@ -15,20 +15,28 @@ program
 
 program
   .argument('<file>', 'File to process')
-  .option('-c, --config <path>', 'Path to config file')
-  .option('--no-duplicates', 'Remove duplicate classes', true)
-  .option('--prepend-custom', 'Prepend custom classes', false)
-  .option('--prefix <prefix>', 'Custom Tailwind prefix', '')
+  .option('-c, --config <path>', 'Path to config file with langConfig')
+  .option('--no-duplicates', 'Do not remove duplicate classes')
+  .option('--prepend-custom', 'Place custom classes before Tailwind classes')
+  .option('--prefix <prefix>', 'Custom Tailwind prefix (e.g., "tw-")', '')
   .action(async (file: string, options: any) => {
     try {
+      // Check if file exists first
+      await fs.access(file);
+
       let langConfig: LangConfig = 'class="([^"]+)"'; // Default HTML
 
       // Load config file if specified
       if (options.config) {
-        const configPath = path.resolve(options.config);
-        const configContent = await fs.readFile(configPath, 'utf-8');
-        const config = JSON.parse(configContent);
-        langConfig = config.langConfig || langConfig;
+        try {
+          const configPath = path.resolve(options.config);
+          const configContent = await fs.readFile(configPath, 'utf-8');
+          const config = JSON.parse(configContent);
+          langConfig = config.langConfig || langConfig;
+        } catch (error) {
+          console.error(`Error loading config file: ${error instanceof Error ? error.message : error}`);
+          process.exit(1);
+        }
       }
 
       // Determine language config from file extension
@@ -40,9 +48,9 @@ program
       }
 
       const processingOptions = {
-        shouldRemoveDuplicates: options.duplicates,
+        shouldRemoveDuplicates: options.duplicates !== false, // Fix: handle --no-duplicates correctly
         shouldPrependCustomClasses: options.prependCustom,
-        customTailwindPrefix: options.prefix
+        customTailwindPrefix: options.prefix || ''
       };
 
       await processFile(file, langConfig, processingOptions);
