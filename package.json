@@ -1,6 +1,6 @@
 {
   "name": "tailwind-class-sorter",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A standalone Tailwind CSS class sorter utility for sorting, deduplicating, and organizing Tailwind classes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
