@@ -1,3 +1,4 @@
+import * as fs from 'fs/promises';
 import { sortClassString, buildMatchers, getTextMatch } from './index';
 import { LangConfig, Options } from './types';
 
@@ -62,4 +63,23 @@ export async function processText(
   }
 
   return result;
+}
+
+/**
+ * Processes a file and sorts Tailwind CSS classes.
+ * @param filePath Path to the file to process
+ * @param langConfig Language configuration for finding class strings
+ * @param options Sorting options
+ */
+export async function processFile(
+  filePath: string,
+  langConfig: LangConfig | LangConfig[],
+  options: Options
+): Promise<void> {
+  const content = await fs.readFile(filePath, 'utf-8');
+  const processed = await processText(content, langConfig, options);
+
+  if (processed !== content) {
+    await fs.writeFile(filePath, processed, 'utf-8');
+  }
 }

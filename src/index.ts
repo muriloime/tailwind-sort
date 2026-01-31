@@ -150,8 +150,8 @@ export function getTextMatch(
 	}
 }
 
-// Re-export processor function
-export { processText } from './processor';
+// Re-export processor functions
+export { processText, processFile } from './processor';
 
 // Re-export types (using compatible syntax for older TypeScript versions)
 export { Options, LangConfig, Matcher } from './types';

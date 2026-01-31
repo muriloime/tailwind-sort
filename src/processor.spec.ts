@@ -1,4 +1,6 @@
-import { processText } from './processor';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { processText, processFile } from './processor';
 import { LangConfig } from './types';
 
 describe('processText', () => {
@@ -125,5 +127,68 @@ describe('processText', () => {
     expect(result).toContain('Hello World');
     expect(result).toContain('<div');
     expect(result).toContain('</div>');
+  });
+});
+
+describe('processFile', () => {
+  const testDir = path.join(__dirname, '../test-files');
+  const testFile = path.join(testDir, 'test.html');
+
+  beforeAll(async () => {
+    await fs.mkdir(testDir, { recursive: true });
+  });
+
+  afterAll(async () => {
+    await fs.rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should process classes in an HTML file', async () => {
+    const input = '<div class="p-4 flex m-2">content</div>';
+    await fs.writeFile(testFile, input, 'utf-8');
+
+    const langConfig = 'class="([^"]+)"';
+    const options = {
+      shouldRemoveDuplicates: true,
+      shouldPrependCustomClasses: false,
+      customTailwindPrefix: ''
+    };
+
+    await processFile(testFile, langConfig, options);
+
+    const result = await fs.readFile(testFile, 'utf-8');
+
+    // Verify all classes are present
+    expect(result).toContain('class="');
+    expect(result).toContain('flex');
+    expect(result).toContain('m-2');
+    expect(result).toContain('p-4');
+    expect(result).toContain('content</div>');
+  });
+
+  it('should not write file if content unchanged', async () => {
+    const input = '<div>no classes here</div>';
+    await fs.writeFile(testFile, input, 'utf-8');
+
+    const langConfig = 'class="([^"]+)"';
+    const options = {
+      shouldRemoveDuplicates: true,
+      shouldPrependCustomClasses: false,
+      customTailwindPrefix: ''
+    };
+
+    // Get the file stats before processing
+    const statsBefore = await fs.stat(testFile);
+
+    // Wait a bit to ensure mtime would change if file is written
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    await processFile(testFile, langConfig, options);
+
+    const statsAfter = await fs.stat(testFile);
+    const result = await fs.readFile(testFile, 'utf-8');
+
+    // File should not be modified if content is same
+    expect(result).toBe(input);
+    expect(statsAfter.mtimeMs).toBe(statsBefore.mtimeMs);
   });
 });
