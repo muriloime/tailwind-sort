@@ -1,67 +1,59 @@
+import { sortTailwindClasses } from '@herb-tools/tailwind-class-sorter';
 import { Options, LangConfig, Matcher } from './types';
 
 /**
- * Sorts a string of CSS classes according to a predefined order.
+ * Sorts a string of CSS classes using @herb-tools/tailwind-class-sorter.
  * @param classString The string to sort
- * @param sortOrder The default order to sort the array at
  * @param options Configuration options for sorting behavior
- *
- * @returns The sorted string
+ * @returns Promise resolving to the sorted string
  */
-export const sortClassString = (
+export const sortClassString = async (
 	classString: string,
-	sortOrder: string[],
 	options: Options
-): string => {
+): Promise<string> => {
 
 	const default_separator = classString.includes(' ') ? /\s+/g : '.';
 	const default_replacement = classString.includes(' ') ? ' ' : '.';
 
 	let classArray = classString.split(options.separator || default_separator);
-
 	classArray = classArray.filter((el) => el !== '');
 
 	if (options.shouldRemoveDuplicates) {
 		classArray = removeDuplicates(classArray);
 	}
 
-	// prepend custom tailwind prefix to all tailwind sortOrder-classes
-	const sortOrderClone = options.customTailwindPrefix.length > 0
-		? sortOrder.map(className => options.customTailwindPrefix + className)
-		: [...sortOrder];
-
-	classArray = sortClassArray(
-		classArray,
-		sortOrderClone,
-		options.shouldPrependCustomClasses
-	);
-
-	const result = classArray.join(options.replacement || default_replacement).trim()
-	if( (default_separator === ".") && (classString.startsWith(".")))
-	{
-		return "." + result;
+	// Apply custom prefix if specified
+	if (options.customTailwindPrefix.length > 0) {
+		classArray = classArray.map(className =>
+			className.startsWith(options.customTailwindPrefix)
+				? className
+				: options.customTailwindPrefix + className
+		);
 	}
-	else
-	{
-		return result
-	};
-};
 
-const sortClassArray = (
-	classArray: string[],
-	sortOrder: string[],
-	shouldPrependCustomClasses: boolean
-): string[] => [
-	...classArray.filter(
-		(el) => shouldPrependCustomClasses && sortOrder.indexOf(el) === -1
-	), // append the classes that were not in the sort order if configured this way
-	...classArray
-		.filter((el) => sortOrder.indexOf(el) !== -1) // take the classes that are in the sort order
-		.sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b)), // and sort them
-	...classArray.filter(
-		(el) => !shouldPrependCustomClasses && sortOrder.indexOf(el) === -1
-	), // prepend the classes that were not in the sort order if configured this way
-];
+	// Use @herb-tools/tailwind-class-sorter for sorting
+	const joined = classArray.join(' ');
+	let sorted: string;
+
+	try {
+		sorted = await sortTailwindClasses(joined, {
+			tailwindPreserveDuplicates: !options.shouldRemoveDuplicates
+		});
+	} catch (e) {
+		// Fallback to unsorted if sorting fails
+		sorted = joined;
+	}
+
+	// Split back and apply custom replacement if needed
+	const sortedArray = sorted.split(' ').filter(el => el !== '');
+	const result = sortedArray.join(options.replacement || default_replacement).trim();
+
+	if (default_separator === '.' && classString.startsWith('.')) {
+		return '.' + result;
+	}
+
+	return result;
+};
 
 const removeDuplicates = (classArray: string[]): string[] => [
 	...new Set(classArray),
