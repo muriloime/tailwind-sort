@@ -4,6 +4,7 @@ import { Options, LangConfig, Matcher } from './types';
  * Sorts a string of CSS classes according to a predefined order.
  * @param classString The string to sort
  * @param sortOrder The default order to sort the array at
+ * @param options Configuration options for sorting behavior
  *
  * @returns The sorted string
  */
@@ -25,13 +26,9 @@ export const sortClassString = (
 	}
 
 	// prepend custom tailwind prefix to all tailwind sortOrder-classes
-	const sortOrderClone = [...sortOrder];
-
-	if (options.customTailwindPrefix.length > 0) {
-		for (var i = 0; i < sortOrderClone.length; i++) {
-			sortOrderClone[i] = options.customTailwindPrefix + sortOrderClone[i];
-		}
-	}
+	const sortOrderClone = options.customTailwindPrefix.length > 0
+		? sortOrder.map(className => options.customTailwindPrefix + className)
+		: [...sortOrder];
 
 	classArray = sortClassArray(
 		classArray,
@@ -40,7 +37,7 @@ export const sortClassString = (
 	);
 
 	const result = classArray.join(options.replacement || default_replacement).trim()
-	if( (default_separator == ".") && (classString.startsWith(".")))
+	if( (default_separator === ".") && (classString.startsWith(".")))
 	{
 		return "." + result;
 	}
@@ -85,7 +82,7 @@ function buildMatcher(value: LangConfig): Matcher {
 		return {
 			regex: value.map((v) => new RegExp(v, 'gi')),
 		};
-	} else if (value == undefined) {
+	} else if (value === undefined) {
 		return {
 			regex: [],
 		};
@@ -106,8 +103,15 @@ function buildMatcher(value: LangConfig): Matcher {
 	}
 }
 
+/**
+ * Builds an array of matchers from language configuration.
+ * Converts various configuration formats into a normalized array of Matcher objects.
+ * @param value Language configuration as a string, array of strings, config object, or array of configs
+ *
+ * @returns Array of Matcher objects containing regex patterns and optional separators
+ */
 export function buildMatchers(value: LangConfig | LangConfig[]): Matcher[] {
-	if (value == undefined) {
+	if (value === undefined) {
 		return [];
 	} else if (Array.isArray(value)) {
 		if (!value.length) {
@@ -119,6 +123,14 @@ export function buildMatchers(value: LangConfig | LangConfig[]): Matcher[] {
 	return [buildMatcher(value)];
 }
 
+/**
+ * Recursively matches text against a series of regular expressions.
+ * Used to extract class strings from nested language constructs.
+ * @param regexes Array of regular expressions to match sequentially
+ * @param text The text to search in
+ * @param callback Function called for each match with the matched text and its position
+ * @param startPosition Starting position offset for calculating absolute positions
+ */
 export function getTextMatch(
 	regexes: RegExp[],
 	text: string,
