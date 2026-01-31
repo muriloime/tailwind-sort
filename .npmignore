@@ -1,0 +1,7 @@
+src/
+tsconfig.json
+jest.config.js
+*.spec.ts
+.git/
+node_modules/
+coverage/
