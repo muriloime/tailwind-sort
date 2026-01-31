@@ -101,6 +101,43 @@ describe('sortClassString', () => {
     expect(result).toBe(expected);
   });
 
+  it('should handle Tailwind variants and complex classes', () => {
+    const customSortOrder = ['p-4', 'sm:p-8', 'hover:bg-red-500', 'w-1/2', '[mask-image:none]'];
+    const input = '[mask-image:none] hover:bg-red-500 w-1/2 sm:p-8 p-4';
+    const expected = 'p-4 sm:p-8 hover:bg-red-500 w-1/2 [mask-image:none]';
+
+    const result = sortClassString(input, customSortOrder, defaultOptions);
+
+    expect(result).toBe(expected);
+  });
+
+  it('should sort classes with variants correctly even if not in sort order', () => {
+    const input = 'hover:custom-class flex container';
+    const expected = 'container flex hover:custom-class';
+
+    const result = sortClassString(input, sortOrder, defaultOptions);
+
+    expect(result).toBe(expected);
+  });
+
+  it('should handle weird spacing and tabs', () => {
+    const input = '  flex\tcontainer\ntext-white  ';
+    const expected = 'container flex text-white';
+
+    const result = sortClassString(input, sortOrder, defaultOptions);
+
+    expect(result).toBe(expected);
+  });
+
+  it('should default to dot separator if no spaces are present', () => {
+    const input = 'flex.container';
+    const expected = 'container.flex';
+
+    const result = sortClassString(input, sortOrder, defaultOptions);
+
+    expect(result).toBe(expected);
+  });
+
   it('should handle empty strings', () => {
     const input = '';
     const expected = '';
@@ -183,6 +220,19 @@ describe('buildMatchers', () => {
     expect(result).toHaveLength(2);
     expect(result[0].regex).toHaveLength(1);
     expect(result[1].regex).toHaveLength(1);
+  });
+
+  it('should handle mixed array of strings and objects', () => {
+    const config = [
+      'class="([^"]*)"',
+      { regex: 'className=\\{([^\\}]*)\\}', separator: ',' }
+    ];
+    const result = buildMatchers(config as any);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].regex[0].source).toBe('class="([^"]*)"');
+    expect(result[1].regex[0].source).toBe('className=\\{([^\\}]*)\\}');
+    expect(result[1].separator?.source).toBe(',');
   });
 
   it('should return empty array for empty array config', () => {
@@ -297,5 +347,22 @@ describe('getTextMatch', () => {
 
     expect(matches).toHaveLength(1);
     expect(matches[0]).toBe('flex container');
+  });
+
+  it('should handle complex nested extraction with correct positions', () => {
+    const outer = /directive\s*:\s*\[([^\]]*)\]/g;
+    const inner = /"([^"]*)"/g;
+    const text = 'directive: ["flex items-center", "p-4 justify-between"]';
+    const matches: Array<{ text: string; position: number }> = [];
+
+    getTextMatch([outer, inner], text, (text, position) => {
+      matches.push({ text, position });
+    });
+
+    expect(matches).toHaveLength(2);
+    expect(matches[0].text).toBe('flex items-center');
+    expect(matches[0].position).toBe(13);
+    expect(matches[1].text).toBe('p-4 justify-between');
+    expect(matches[1].position).toBe(34);
   });
 });
