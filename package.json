@@ -28,6 +28,9 @@
     "README.md",
     "LICENSE"
   ],
+  "dependencies": {
+    "@herb-tools/tailwind-class-sorter": "^0.8.9"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^20.0.0",
