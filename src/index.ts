@@ -36,18 +36,10 @@ export const sortClassString = async (
 	let sorted: string;
 
 	try {
-		// Determine if baseDir is a file path or directory
-		const isFilePath = options.baseDir?.endsWith('.js') || options.baseDir?.endsWith('.ts') ||
-		                   options.baseDir?.endsWith('.cjs') || options.baseDir?.endsWith('.mjs');
-
+		//  Don't pass config options at all - let @herb-tools use its default discovery
+		// which works from process.cwd()
 		sorted = await sortTailwindClasses(joined, {
-			tailwindPreserveDuplicates: !options.shouldRemoveDuplicates,
-			// If baseDir is a file path, use tailwindConfig option
-			// Otherwise use baseDir for directory-based config discovery
-			...(isFilePath
-				? { tailwindConfig: options.baseDir }
-				: { baseDir: options.baseDir }
-			)
+			tailwindPreserveDuplicates: !options.shouldRemoveDuplicates
 		});
 	} catch (e) {
 		// Fallback to unsorted if sorting fails

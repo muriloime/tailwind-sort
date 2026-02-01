@@ -19,6 +19,7 @@ program
   .option('--no-duplicates', 'Do not remove duplicate classes')
   .option('--prepend-custom', 'Place custom classes before Tailwind classes')
   .option('--prefix <prefix>', 'Custom Tailwind prefix (e.g., "tw-")', '')
+  .option('--base-dir <path>', 'Base directory for resolving Tailwind config')
   .action(async (files: string[], options: any) => {
     let baseLangConfig: LangConfig | undefined;
 
@@ -38,7 +39,8 @@ program
     const processingOptions = {
       shouldRemoveDuplicates: options.duplicates !== false,
       shouldPrependCustomClasses: options.prependCustom,
-      customTailwindPrefix: options.prefix || ''
+      customTailwindPrefix: options.prefix || '',
+      baseDir: options.baseDir ? path.resolve(options.baseDir) : undefined
     };
 
     for (const file of files) {
