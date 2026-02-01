@@ -36,11 +36,17 @@ export const sortClassString = async (
 	let sorted: string;
 
 	try {
+		// console.log('    Calling @herb-tools with:', joined);
+		// console.log('    Current working directory:', process.cwd());
+		// console.log('    baseDir option:', options.baseDir);
 		sorted = await sortTailwindClasses(joined, {
-			tailwindPreserveDuplicates: !options.shouldRemoveDuplicates
+			tailwindPreserveDuplicates: !options.shouldRemoveDuplicates,
+			baseDir: options.baseDir
 		});
+		// console.log('    @herb-tools returned:', sorted);
 	} catch (e) {
 		// Fallback to unsorted if sorting fails
+		console.error('    @herb-tools ERROR:', e);
 		sorted = joined;
 	}
 

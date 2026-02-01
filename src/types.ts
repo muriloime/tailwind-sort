@@ -4,6 +4,7 @@ export interface Options {
 	customTailwindPrefix: string;
 	separator?: RegExp;
 	replacement?: string;
+	baseDir?: string;  // Base directory for resolving Tailwind config
 }
 
 export type LangConfig =
