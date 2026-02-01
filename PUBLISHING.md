@@ -1,6 +1,6 @@
-# Publishing Guide for tailwind-class-sorter
+# Publishing Guide for tailwind-sort
 
-This guide covers testing and publishing the tailwind-class-sorter package to npm.
+This guide covers testing and publishing the tailwind-sort package to npm.
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ npm run build
 
 **Expected output:**
 ```
-> tailwind-class-sorter@2.0.0 build
+> tailwind-sort@2.0.0 build
 > tsc
 ```
 
@@ -73,11 +73,11 @@ Should contain:
 
 ```bash
 # Test CLI help
-node ./bin/tailwind-class-sorter --help
+node ./bin/tailwind-sort --help
 
 # Test on a sample file (if you have one)
 echo '<div class="px-4 container mx-auto text-center">Test</div>' > test.html
-node ./bin/tailwind-class-sorter test.html
+node ./bin/tailwind-sort test.html
 cat test.html
 rm test.html
 ```
@@ -92,7 +92,7 @@ cat package.json | grep -E '"name"|"version"|"description"|"main"|"types"|"bin"'
 
 Should show:
 ```json
-"name": "tailwind-class-sorter",
+"name": "tailwind-sort",
 "version": "2.0.0",
 "description": "A standalone Tailwind CSS class sorter utility for sorting, deduplicating, and organizing Tailwind classes",
 "main": "dist/index.js",
@@ -123,24 +123,24 @@ Create a local tarball and test it:
 # Create tarball
 npm pack
 
-# This creates: tailwind-class-sorter-2.0.0.tgz
+# This creates: tailwind-sort-2.0.0.tgz
 
 # Test in a temporary directory
 mkdir /tmp/test-package
 cd /tmp/test-package
 npm init -y
-npm install /path/to/tailwind-class-sorter/tailwind-class-sorter-2.0.0.tgz
+npm install /path/to/tailwind-sort/tailwind-sort-2.0.0.tgz
 
 # Test it works
-node -e "const { sortClassString } = require('tailwind-class-sorter'); sortClassString('px-4 container', {}).then(console.log)"
+node -e "const { sortClassString } = require('tailwind-sort'); sortClassString('px-4 container', {}).then(console.log)"
 
 # Test CLI
-npx tailwind-class-sorter --help
+npx tailwind-sort --help
 
 # Cleanup
-cd /path/to/tailwind-class-sorter
+cd /path/to/tailwind-sort
 rm -rf /tmp/test-package
-rm tailwind-class-sorter-2.0.0.tgz
+rm tailwind-sort-2.0.0.tgz
 ```
 
 ## Publishing to npm
@@ -157,21 +157,21 @@ npm publish --access public
 **Expected output:**
 ```
 npm notice
-npm notice 📦  tailwind-class-sorter@2.0.0
+npm notice 📦  tailwind-sort@2.0.0
 npm notice === Tarball Contents ===
 npm notice 2.5kB  README.md
 npm notice 1.1kB  LICENSE
 npm notice 1.0kB  package.json
 npm notice ...
 npm notice === Tarball Details ===
-npm notice name:          tailwind-class-sorter
+npm notice name:          tailwind-sort
 npm notice version:       2.0.0
-npm notice filename:      tailwind-class-sorter-2.0.0.tgz
+npm notice filename:      tailwind-sort-2.0.0.tgz
 npm notice package size:  XX.X kB
 npm notice unpacked size: XXX.X kB
 npm notice total files:   XX
 npm notice
-+ tailwind-class-sorter@2.0.0
++ tailwind-sort@2.0.0
 ```
 
 ### Publishing Updates (Future Versions)
@@ -216,10 +216,10 @@ For future updates after 2.0.0:
 
 ```bash
 # View package info
-npm view tailwind-class-sorter
+npm view tailwind-sort
 
 # Check specific version
-npm view tailwind-class-sorter@2.0.0
+npm view tailwind-sort@2.0.0
 ```
 
 ### 2. Test Installation from npm
@@ -229,13 +229,13 @@ npm view tailwind-class-sorter@2.0.0
 mkdir /tmp/test-npm-install
 cd /tmp/test-npm-install
 npm init -y
-npm install tailwind-class-sorter
+npm install tailwind-sort
 
 # Test it works
-node -e "const { sortClassString } = require('tailwind-class-sorter'); sortClassString('px-4 container', {shouldRemoveDuplicates: true, shouldPrependCustomClasses: false, customTailwindPrefix: ''}).then(console.log)"
+node -e "const { sortClassString } = require('tailwind-sort'); sortClassString('px-4 container', {shouldRemoveDuplicates: true, shouldPrependCustomClasses: false, customTailwindPrefix: ''}).then(console.log)"
 
 # Test CLI
-npx tailwind-class-sorter --help
+npx tailwind-sort --help
 
 # Cleanup
 cd -
@@ -244,7 +244,7 @@ rm -rf /tmp/test-npm-install
 
 ### 3. Check Package Page
 
-Visit: https://www.npmjs.com/package/tailwind-class-sorter
+Visit: https://www.npmjs.com/package/tailwind-sort
 
 Verify:
 - ✅ README is displayed correctly
@@ -265,7 +265,7 @@ npm login
 ### Error: "Package name already exists"
 
 **Solution:** The package name is taken. You need to either:
-1. Use a scoped package name: `@yourusername/tailwind-class-sorter`
+1. Use a scoped package name: `@yourusername/tailwind-sort`
 2. Choose a different package name
 
 ### Error: "Version 2.0.0 already published"
@@ -287,8 +287,8 @@ npm publish
 
 **Solution:**
 1. Verify `bin` field in package.json points to correct file
-2. Ensure `bin/tailwind-class-sorter` has shebang: `#!/usr/bin/env node`
-3. Check file permissions: `chmod +x bin/tailwind-class-sorter`
+2. Ensure `bin/tailwind-sort` has shebang: `#!/usr/bin/env node`
+3. Check file permissions: `chmod +x bin/tailwind-sort`
 
 ## Rollback / Unpublish
 
@@ -299,7 +299,7 @@ npm publish
 Instead of unpublishing, deprecate:
 
 ```bash
-npm deprecate tailwind-class-sorter@2.0.0 "This version has critical bugs. Please upgrade to 2.0.1+"
+npm deprecate tailwind-sort@2.0.0 "This version has critical bugs. Please upgrade to 2.0.1+"
 ```
 
 ### Unpublish (Use with Caution)
@@ -307,7 +307,7 @@ npm deprecate tailwind-class-sorter@2.0.0 "This version has critical bugs. Pleas
 Only within 72 hours of publishing:
 
 ```bash
-npm unpublish tailwind-class-sorter@2.0.0
+npm unpublish tailwind-sort@2.0.0
 ```
 
 ## Publishing Checklist Summary
@@ -327,7 +327,7 @@ Before running `npm publish`, verify:
 
 After publishing:
 
-- [ ] Verify on npm registry (`npm view tailwind-class-sorter`)
+- [ ] Verify on npm registry (`npm view tailwind-sort`)
 - [ ] Test installation from npm
 - [ ] Check package page on npmjs.com
 - [ ] Create git tag for version
@@ -349,6 +349,6 @@ This ensures consistent, tested releases.
 **Ready to publish?**
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
+cd /mnt/data/code/aio/tailwind-sort
 npm test && npm run build && npm publish --access public
 ```

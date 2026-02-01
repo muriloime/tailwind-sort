@@ -1,6 +1,6 @@
 # Quick Start: Setup → Test → Publish
 
-This is your quick reference guide to get the tailwind-class-sorter package from the current state to published on npm.
+This is your quick reference guide to get the tailwind-sort package from the current state to published on npm.
 
 ## Current Status
 
@@ -18,23 +18,23 @@ This is your quick reference guide to get the tailwind-class-sorter package from
 **Quick Command (using GitHub CLI):**
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
-gh repo create tailwind-class-sorter --public --source=. --remote=origin --push
+cd /mnt/data/code/aio/tailwind-sort
+gh repo create tailwind-sort --public --source=. --remote=origin --push
 ```
 
 **Manual Setup:**
 1. Create repository at https://github.com/new
-2. Name: `tailwind-class-sorter`
+2. Name: `tailwind-sort`
 3. Visibility: **Public**
 4. Don't initialize with README
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
-git remote add origin https://github.com/YOUR_USERNAME/tailwind-class-sorter.git
+cd /mnt/data/code/aio/tailwind-sort
+git remote add origin https://github.com/YOUR_USERNAME/tailwind-sort.git
 git push -u origin main
 ```
 
-**Verify:** Visit https://github.com/YOUR_USERNAME/tailwind-class-sorter
+**Verify:** Visit https://github.com/YOUR_USERNAME/tailwind-sort
 
 📖 **Detailed guide:** [SETUP.md](./SETUP.md)
 
@@ -45,7 +45,7 @@ git push -u origin main
 **Run pre-publish checks:**
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
+cd /mnt/data/code/aio/tailwind-sort
 
 # 1. Run tests
 npm test
@@ -54,7 +54,7 @@ npm test
 npm run build
 
 # 3. Test CLI
-node ./bin/tailwind-class-sorter --help
+node ./bin/tailwind-sort --help
 
 # 4. Check what will be published
 npm pack --dry-run
@@ -85,7 +85,7 @@ npm login
 **Publish:**
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
+cd /mnt/data/code/aio/tailwind-sort
 
 # All-in-one command (test, build, publish)
 npm test && npm run build && npm publish --access public
@@ -95,16 +95,16 @@ npm test && npm run build && npm publish --access public
 
 ```bash
 # Check on npm
-npm view tailwind-class-sorter
+npm view tailwind-sort
 
 # Test installation
 mkdir /tmp/test-install && cd /tmp/test-install
-npm install tailwind-class-sorter
-npx tailwind-class-sorter --help
+npm install tailwind-sort
+npx tailwind-sort --help
 cd - && rm -rf /tmp/test-install
 ```
 
-**View on npm:** https://www.npmjs.com/package/tailwind-class-sorter
+**View on npm:** https://www.npmjs.com/package/tailwind-sort
 
 📖 **Detailed guide:** [PUBLISHING.md](./PUBLISHING.md)
 
@@ -115,7 +115,7 @@ cd - && rm -rf /tmp/test-install
 If you've already done Step 1 (GitHub setup) and are ready to publish:
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter && npm test && npm run build && npm publish --access public
+cd /mnt/data/code/aio/tailwind-sort && npm test && npm run build && npm publish --access public
 ```
 
 ## After Publishing
@@ -126,16 +126,16 @@ Once published to npm, update the Headwind extension's package.json:
 
 ```bash
 cd /mnt/data/code/aio/headwind
-npm install tailwind-class-sorter@2.0.0
+npm install tailwind-sort@2.0.0
 git add package.json package-lock.json
-git commit -m "chore: update to tailwind-class-sorter@2.0.0"
+git commit -m "chore: update to tailwind-sort@2.0.0"
 git push
 ```
 
 ### Create GitHub Release
 
 ```bash
-cd /mnt/data/code/aio/tailwind-class-sorter
+cd /mnt/data/code/aio/tailwind-sort
 git tag -a v2.0.0 -m "Release v2.0.0"
 git push origin v2.0.0
 gh release create v2.0.0 --title "v2.0.0 - Major Refactor" --notes-file CHANGELOG.md
@@ -146,7 +146,7 @@ gh release create v2.0.0 --title "v2.0.0 - Major Refactor" --notes-file CHANGELO
 | Issue | Quick Fix |
 |-------|-----------|
 | "Permission denied" on npm publish | Run `npm login` |
-| "Package name already taken" | Use scoped name: `@yourusername/tailwind-class-sorter` |
+| "Package name already taken" | Use scoped name: `@yourusername/tailwind-sort` |
 | Tests fail | Fix tests before publishing |
 | "No remote configured" | Run Step 1 (GitHub setup) |
 | "Version already published" | Bump version: `npm version patch` |
@@ -161,8 +161,8 @@ gh release create v2.0.0 --title "v2.0.0 - Major Refactor" --notes-file CHANGELO
 
 ## Support
 
-- **Issues:** https://github.com/YOUR_USERNAME/tailwind-class-sorter/issues
-- **npm:** https://www.npmjs.com/package/tailwind-class-sorter
+- **Issues:** https://github.com/YOUR_USERNAME/tailwind-sort/issues
+- **npm:** https://www.npmjs.com/package/tailwind-sort
 - **Headwind Extension:** https://github.com/muriloime/headwind
 
 ---
@@ -171,12 +171,12 @@ gh release create v2.0.0 --title "v2.0.0 - Major Refactor" --notes-file CHANGELO
 
 ```bash
 # 1. Setup (if not done)
-cd /mnt/data/code/aio/tailwind-class-sorter
-gh repo create tailwind-class-sorter --public --source=. --remote=origin --push
+cd /mnt/data/code/aio/tailwind-sort
+gh repo create tailwind-sort --public --source=. --remote=origin --push
 
 # 2. Test & Publish
 npm test && npm run build && npm publish --access public
 
 # 3. Verify
-npm view tailwind-class-sorter
+npm view tailwind-sort
 ```

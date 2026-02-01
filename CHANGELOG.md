@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New `processText` function for processing text with language-specific matchers
 - New `processFile` function for processing entire files and writing them back
-- CLI tool (`tailwind-class-sorter`) for command-line usage
+- CLI tool (`tailwind-sort`) for command-line usage
 - Support for `headwind-ignore` comments to skip sorting specific class strings
 - Support for `headwind-ignore-all` comments to skip sorting entire files
 - `customTailwindPrefix` option for custom Tailwind CSS prefixes (e.g., "tw-")
@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-01-31
 
 ### Added
-- Initial release of tailwind-class-sorter
+- Initial release of tailwind-sort
 - Core sorting functionality extracted from Headwind VS Code extension
 - `sortClassString` function for sorting Tailwind CSS classes
 - `buildMatchers` function for building regex matchers

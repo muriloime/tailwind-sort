@@ -1,4 +1,4 @@
-# tailwind-class-sorter
+# tailwind-sort
 
 A standalone Tailwind CSS class sorter utility powered by [@herb-tools/tailwind-class-sorter](https://www.npmjs.com/package/@herb-tools/tailwind-class-sorter). This package provides Prettier-compatible sorting, deduplication, and organization of Tailwind classes with support for multiple languages and frameworks.
 
@@ -15,7 +15,7 @@ A standalone Tailwind CSS class sorter utility powered by [@herb-tools/tailwind-
 ## Installation
 
 ```bash
-npm install tailwind-class-sorter
+npm install tailwind-sort
 ```
 
 ## Quick Start
@@ -23,7 +23,7 @@ npm install tailwind-class-sorter
 ### Programmatic Usage
 
 ```typescript
-import { sortClassString } from 'tailwind-class-sorter';
+import { sortClassString } from 'tailwind-sort';
 
 // Sort classes (async)
 const sorted = await sortClassString('px-4 container mx-auto text-center', {
@@ -39,16 +39,16 @@ console.log(sorted); // "container mx-auto px-4 text-center"
 
 ```bash
 # Sort classes in a file
-npx tailwind-class-sorter src/components/Button.tsx
+npx tailwind-sort src/components/Button.tsx
 
 # Process with custom config
-npx tailwind-class-sorter src/index.html --config tailwind.config.json
+npx tailwind-sort src/index.html --config tailwind.config.json
 
 # Keep duplicates
-npx tailwind-class-sorter src/page.jsx --no-duplicates
+npx tailwind-sort src/page.jsx --no-duplicates
 
 # Use custom Tailwind prefix
-npx tailwind-class-sorter src/app.tsx --prefix "tw-"
+npx tailwind-sort src/app.tsx --prefix "tw-"
 ```
 
 ## API Reference
@@ -70,7 +70,7 @@ Sorts a string of CSS classes using @herb-tools/tailwind-class-sorter.
 
 **Example:**
 ```typescript
-import { sortClassString } from 'tailwind-class-sorter';
+import { sortClassString } from 'tailwind-sort';
 
 const sorted = await sortClassString('text-lg p-4 bg-blue-500 text-center', {
   shouldRemoveDuplicates: true,
@@ -94,7 +94,7 @@ Processes text and sorts Tailwind CSS classes found using language-specific rege
 
 **Example:**
 ```typescript
-import { processText } from 'tailwind-class-sorter';
+import { processText } from 'tailwind-sort';
 
 const html = '<div class="px-4 container mx-auto">Content</div>';
 const processed = await processText(html, 'class="([^"]+)"', {
@@ -141,7 +141,7 @@ Processes a file and sorts Tailwind CSS classes in place.
 
 **Example:**
 ```typescript
-import { processFile } from 'tailwind-class-sorter';
+import { processFile } from 'tailwind-sort';
 
 // Process HTML file
 await processFile('src/index.html', 'class="([^"]+)"', {
@@ -175,7 +175,7 @@ The package includes a command-line tool for processing files directly.
 ### Command
 
 ```bash
-tailwind-class-sorter <file> [options]
+tailwind-sort <file> [options]
 ```
 
 ### Options
@@ -189,16 +189,16 @@ tailwind-class-sorter <file> [options]
 
 ```bash
 # Basic usage
-tailwind-class-sorter src/index.html
+tailwind-sort src/index.html
 
 # With config file
-tailwind-class-sorter src/app.tsx --config my-config.json
+tailwind-sort src/app.tsx --config my-config.json
 
 # Keep duplicates and use custom prefix
-tailwind-class-sorter src/styles.jsx --no-duplicates --prefix "tw-"
+tailwind-sort src/styles.jsx --no-duplicates --prefix "tw-"
 
 # JSX files (automatically detected)
-tailwind-class-sorter src/components/Button.tsx
+tailwind-sort src/components/Button.tsx
 ```
 
 ### Config File Format
@@ -340,7 +340,7 @@ const processed = await processText(htmlContent, 'class="([^"]+)"', options);
 await processFile('src/index.html', 'class="([^"]+)"', options);
 
 // Use CLI
-// npx tailwind-class-sorter src/app.tsx
+// npx tailwind-sort src/app.tsx
 ```
 
 ## Use Cases
@@ -348,7 +348,7 @@ await processFile('src/index.html', 'class="([^"]+)"', options);
 ### In Build Scripts
 
 ```javascript
-import { processFile } from 'tailwind-class-sorter';
+import { processFile } from 'tailwind-sort';
 import { glob } from 'glob';
 
 async function sortAllClasses() {
@@ -377,7 +377,7 @@ sortAllClasses();
 ```json
 {
   "scripts": {
-    "precommit": "tailwind-class-sorter $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(html|jsx|tsx)$')"
+    "precommit": "tailwind-sort $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(html|jsx|tsx)$')"
   }
 }
 ```
@@ -395,7 +395,7 @@ const sorted = await sortClassString('tw-px-4 tw-container tw-mx-auto', {
 ### Processing React Components
 
 ```typescript
-import { processText } from 'tailwind-class-sorter';
+import { processText } from 'tailwind-sort';
 import * as fs from 'fs/promises';
 
 async function sortReactComponent(filePath: string) {
@@ -425,7 +425,7 @@ import {
   Options,
   LangConfig,
   Matcher
-} from 'tailwind-class-sorter';
+} from 'tailwind-sort';
 
 // Full type safety
 const options: Options = {
@@ -481,4 +481,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/muriloime/tailwind-class-sorter/issues) on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/muriloime/tailwind-sort/issues) on GitHub.
