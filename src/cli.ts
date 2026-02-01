@@ -14,50 +14,53 @@ program
   .version('2.0.0');
 
 program
-  .argument('<file>', 'File to process')
+  .argument('<files...>', 'Files to process')
   .option('-c, --config <path>', 'Path to config file with langConfig')
   .option('--no-duplicates', 'Do not remove duplicate classes')
   .option('--prepend-custom', 'Place custom classes before Tailwind classes')
   .option('--prefix <prefix>', 'Custom Tailwind prefix (e.g., "tw-")', '')
-  .action(async (file: string, options: any) => {
-    try {
-      // Check if file exists first
-      await fs.access(file);
+  .action(async (files: string[], options: any) => {
+    let baseLangConfig: LangConfig | undefined;
 
-      let langConfig: LangConfig = 'class="([^"]+)"'; // Default HTML
+    // Load config file if specified
+    if (options.config) {
+      try {
+        const configPath = path.resolve(options.config);
+        const configContent = await fs.readFile(configPath, 'utf-8');
+        const config = JSON.parse(configContent);
+        baseLangConfig = config.langConfig;
+      } catch (error) {
+        console.error(`Error loading config file: ${error instanceof Error ? error.message : error}`);
+        process.exit(1);
+      }
+    }
 
-      // Load config file if specified
-      if (options.config) {
-        try {
-          const configPath = path.resolve(options.config);
-          const configContent = await fs.readFile(configPath, 'utf-8');
-          const config = JSON.parse(configContent);
-          langConfig = config.langConfig || langConfig;
-        } catch (error) {
-          console.error(`Error loading config file: ${error instanceof Error ? error.message : error}`);
-          process.exit(1);
+    const processingOptions = {
+      shouldRemoveDuplicates: options.duplicates !== false,
+      shouldPrependCustomClasses: options.prependCustom,
+      customTailwindPrefix: options.prefix || ''
+    };
+
+    for (const file of files) {
+      try {
+        // Check if file exists first
+        await fs.access(file);
+
+        let langConfig: LangConfig = baseLangConfig || 'class="([^"]+)"'; // Default HTML or from config
+
+        // Determine language config from file extension (extension-based override)
+        const ext = path.extname(file);
+        if (ext === '.haml') {
+          langConfig = '\\.([\\._a-zA-Z0-9\\-]+)';
+        } else if (ext === '.jsx' || ext === '.tsx') {
+          langConfig = 'className="([^"]+)"';
         }
+
+        await processFile(file, langConfig, processingOptions);
+        console.log(`✓ Processed ${file}`);
+      } catch (error) {
+        console.error(`Error processing ${file}:`, error instanceof Error ? error.message : error);
       }
-
-      // Determine language config from file extension
-      const ext = path.extname(file);
-      if (ext === '.haml') {
-        langConfig = '\\.([\\._a-zA-Z0-9\\-]+)';
-      } else if (ext === '.jsx' || ext === '.tsx') {
-        langConfig = 'className="([^"]+)"';
-      }
-
-      const processingOptions = {
-        shouldRemoveDuplicates: options.duplicates !== false, // Fix: handle --no-duplicates correctly
-        shouldPrependCustomClasses: options.prependCustom,
-        customTailwindPrefix: options.prefix || ''
-      };
-
-      await processFile(file, langConfig, processingOptions);
-      console.log(`✓ Processed ${file}`);
-    } catch (error) {
-      console.error(`Error processing ${file}:`, error);
-      process.exit(1);
     }
   });
 
